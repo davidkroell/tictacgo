@@ -26,3 +26,8 @@ type JoinGameBody struct {
 type NewGameResponse struct {
 	SuccessResponse
 }
+
+type PlayGameBody struct {
+	Player string `json:"player"`
+	Field  int    `json:"fieldId"`
+}

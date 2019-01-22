@@ -75,5 +75,31 @@ func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
+	// retrieve game
+	query := mux.Vars(r)
+	gameId := query["gameId"]
+	game := Games[gameId]
 
+	// retrieve json data
+	decoder := json.NewDecoder(r.Body)
+	var reqBody PlayGameBody
+	err := decoder.Decode(&reqBody)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	var player models.Player
+	if game.Player.Name == reqBody.Player {
+		player = game.Player
+	} else if game.Owner.Name == reqBody.Player {
+		player = game.Owner
+	}
+
+	game.PlayTurn(&player, reqBody.Field)
+
+	// save game back
+	Games[gameId] = game
+
+	// write to response stream
+	json.NewEncoder(w).Encode(game)
 }
