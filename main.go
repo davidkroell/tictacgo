@@ -3,11 +3,18 @@ package main
 import (
 	. "davidkroell/basichttp/routes"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	r := mux.NewRouter()
 	gamesRouter := r.PathPrefix("/games").Subrouter()
 
@@ -19,5 +26,5 @@ func main() {
 	gamesRouter.Use(RequestLogger)
 	gamesRouter.Use(HeaderBinding)
 
-	log.Fatal(http.ListenAndServe(":9999", r))
+	log.Fatal(http.ListenAndServe(os.Getenv("LISTEN_ADDR")+":"+os.Getenv("PORT"), r))
 }
