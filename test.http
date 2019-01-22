@@ -35,5 +35,5 @@ Accept: application/json
 
 {
   "player": "David",
-  "field_id": 2
+  "fieldId": 2
 }

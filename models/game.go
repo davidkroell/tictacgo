@@ -1,18 +1,18 @@
 package models
 
 type Game struct {
-	Fields     []Field
-	Owner      Player
-	Player     Player
-	Winner     *Player
-	NextTurn   *Player
-	IsFinished bool
+	Fields     []Field `json:"fields"`
+	Owner      Player  `json:"owner"`
+	Player     Player  `json:"player"`
+	Winner     *Player `json:"winner"`
+	NextTurn   *Player `json:"nextTurn"`
+	IsFinished bool    `json:"isFinished"`
 }
 
 type Field struct {
-	PositionX  int
-	PositionY  int
-	OccupiedBy *Player
+	PositionX  int     `json:"positionX"`
+	PositionY  int     `json:"positionY"`
+	OccupiedBy *Player `json:"occupiedBy"`
 }
 
 func NewGame(owner *Player) Game {

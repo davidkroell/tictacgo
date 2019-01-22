@@ -12,7 +12,7 @@ func main() {
 	gamesRouter := r.PathPrefix("/games").Subrouter()
 
 	gamesRouter.HandleFunc("/new", NewGameHandler).Methods("POST")
-	gamesRouter.HandleFunc("/{gameId}/", StatusGameHandler).Methods("GET")
+	gamesRouter.HandleFunc("/{gameId}", StatusGameHandler).Methods("GET")
 	gamesRouter.HandleFunc("/{gameId}/join", JoinGameHandler).Methods("POST")
 	gamesRouter.HandleFunc("/{gameId}/play", PlayGameHandler).Methods("POST")
 

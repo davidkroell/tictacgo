@@ -66,7 +66,12 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
+	query := mux.Vars(r)
+	gameId := query["gameId"]
 
+	game := Games[gameId]
+
+	json.NewEncoder(w).Encode(game)
 }
 
 func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
