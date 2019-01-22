@@ -1,7 +1,7 @@
 package main
 
 import (
-	. "davidkroell/basichttp/routes"
+	. "github.com/davidkroell/tictacgo/routes"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"log"

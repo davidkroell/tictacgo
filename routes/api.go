@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"davidkroell/basichttp/models"
 	"encoding/json"
 	"fmt"
+	"github.com/davidkroell/tictacgo/models"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -88,6 +88,7 @@ func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err.Error())
 	}
 
+	// get player pointer
 	var player models.Player
 	if game.Player.Name == reqBody.Player {
 		player = game.Player
@@ -95,7 +96,10 @@ func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 		player = game.Owner
 	}
 
-	game.PlayTurn(&player, reqBody.Field)
+	err = game.PlayTurn(&player, reqBody.Field)
+	if err != nil {
+
+	}
 
 	// save game back
 	Games[gameId] = game

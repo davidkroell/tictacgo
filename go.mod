@@ -1,4 +1,4 @@
-module davidkroell/basichttp
+module github.com/davidkroell/tictacgo
 
 require (
 	github.com/gorilla/context v1.1.1 // indirect
