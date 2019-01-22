@@ -10,9 +10,10 @@ func TestPlayGame(t *testing.T) {
 		p1 := NewPlayer("David")
 		p2 := NewPlayer("Christian")
 
-		game := NewGame(&p1, &p2)
+		game := NewGame(&p1)
+		game.JoinGame(&p2)
 
-		err := game.PlayTurn(&game.Player1, 0)
+		err := game.PlayTurn(&game.Owner, 0)
 		if err != nil {
 			t.Errorf(err.Error() + " no error should occur")
 		}
@@ -27,12 +28,12 @@ func TestPlayGame(t *testing.T) {
 			t.Errorf(err.Error() + " no error should occur")
 		}
 
-		err = game.PlayTurn(&game.Player2, 4)
+		err = game.PlayTurn(&game.Player, 4)
 		if err != nil {
 			t.Errorf(err.Error() + " no error should occur")
 		}
 
-		err = game.PlayTurn(&game.Player1, 2)
+		err = game.PlayTurn(&game.Owner, 2)
 		if err != nil {
 			t.Errorf(err.Error() + " no error should occur")
 		}
@@ -48,7 +49,8 @@ func TestPlayGame(t *testing.T) {
 		p1 := NewPlayer("David")
 		p2 := NewPlayer("Christian")
 
-		game := NewGame(&p1, &p2)
+		game := NewGame(&p1)
+		game.JoinGame(&p2)
 
 		game.PlayTurn(&p1, 0)
 
@@ -75,7 +77,8 @@ func TestPlayGame(t *testing.T) {
 		p1 := NewPlayer("David")
 		p2 := NewPlayer("Christian")
 
-		game := NewGame(&p1, &p2)
+		game := NewGame(&p1)
+		game.JoinGame(&p2)
 
 		game.PlayTurn(&p1, 0)
 
@@ -97,7 +100,8 @@ func TestPlayGame(t *testing.T) {
 		p1 := NewPlayer("David")
 		p2 := NewPlayer("Christian")
 
-		game := NewGame(&p1, &p2)
+		game := NewGame(&p1)
+		game.JoinGame(&p2)
 
 		game.PlayTurn(&p1, 6)
 
@@ -120,17 +124,18 @@ func TestGameErrors(t *testing.T) {
 	p1 := NewPlayer("David")
 	p2 := NewPlayer("Christian")
 
-	game := NewGame(&p1, &p2)
+	game := NewGame(&p1)
+	game.JoinGame(&p2)
 
 	t.Run("Same Field twice", func(t *testing.T) {
 		want := "Field already occupied"
 
-		err := game.PlayTurn(&game.Player1, 0)
+		err := game.PlayTurn(&game.Owner, 0)
 		if err != nil {
 			t.Errorf(err.Error() + " no error should occur")
 		}
 
-		err = game.PlayTurn(&game.Player2, 0)
+		err = game.PlayTurn(&game.Player, 0)
 		if err.Error() != want {
 			t.Errorf("Got %s, want %s", err.Error(), want)
 		}
@@ -139,12 +144,12 @@ func TestGameErrors(t *testing.T) {
 	t.Run("Same Player twice", func(t *testing.T) {
 		want := "Player not at turn"
 
-		err := game.PlayTurn(&game.Player1, 3)
+		err := game.PlayTurn(&game.Owner, 3)
 		if err != nil {
 			t.Errorf(err.Error() + " no error should occur")
 		}
 
-		err = game.PlayTurn(&game.Player1, 4)
+		err = game.PlayTurn(&game.Owner, 4)
 		if err.Error() != want {
 			t.Errorf("Got %s, want %s", err.Error(), want)
 		}

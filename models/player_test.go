@@ -9,6 +9,6 @@ func TestNewPlayer(t *testing.T) {
 	got := NewPlayer(want)
 
 	if got.Name != want {
-		t.Errorf("Want %s, got %s\nUnique ID was %s", want, got.Name, got.ID)
+		t.Errorf("Want %s, got %s", want, got.Name)
 	}
 }

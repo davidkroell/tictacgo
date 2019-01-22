@@ -2,8 +2,8 @@ package models
 
 type Game struct {
 	Fields     []Field
-	Player1    Player
-	Player2    Player
+	Owner      Player
+	Player     Player
 	Winner     *Player
 	NextTurn   *Player
 	IsFinished bool
@@ -15,7 +15,7 @@ type Field struct {
 	OccupiedBy *Player
 }
 
-func NewGame(player1 *Player, player2 *Player) Game {
+func NewGame(owner *Player) Game {
 
 	var instance = Game{
 		Fields: []Field{
@@ -56,12 +56,15 @@ func NewGame(player1 *Player, player2 *Player) Game {
 				PositionY: 2,
 			},
 		},
-		Player1:  *player1,
-		Player2:  *player2,
-		NextTurn: player1,
+		Owner:    *owner,
+		NextTurn: owner,
 	}
 
 	return instance
+}
+
+func (g *Game) JoinGame(player *Player) {
+	g.Player = *player
 }
 
 type gameError struct {
@@ -79,14 +82,20 @@ func (g *Game) PlayTurn(p *Player, fieldId int) error {
 		}
 	}
 
+	if &g.Player == nil {
+		return gameError{
+			message: "Only one player in game",
+		}
+	}
+
 	f := &g.Fields[fieldId]
 
 	if *g.NextTurn == *p {
-		if g.Player1 == *p {
-			g.NextTurn = &g.Player2
+		if g.Owner == *p {
+			g.NextTurn = &g.Player
 		}
-		if g.Player2 == *p {
-			g.NextTurn = &g.Player1
+		if g.Player == *p {
+			g.NextTurn = &g.Owner
 		}
 
 		if f.OccupiedBy != nil {
