@@ -19,6 +19,10 @@ type NewGameBody struct {
 	Owner string `json:"owner"`
 }
 
+type JoinGameBody struct {
+	Player string `json:"player"`
+}
+
 type NewGameResponse struct {
 	SuccessResponse
 }

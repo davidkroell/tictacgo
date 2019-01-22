@@ -4,6 +4,7 @@ import (
 	"davidkroell/basichttp/models"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
@@ -35,11 +36,36 @@ func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
+func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var reqBody JoinGameBody
 
+	err := decoder.Decode(&reqBody)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	query := mux.Vars(r)
+	gameId := query["gameId"]
+
+	game := Games[gameId]
+
+	game.Player = models.NewPlayer(reqBody.Player)
+
+	Games[gameId] = game
+
+	var resp = NewGameResponse{
+		SuccessResponse: SuccessResponse{
+			Response: Response{
+				Success: true,
+			},
+			Message: fmt.Sprintf("Game %s joined", query["gameId"]),
+		},
+	}
+
+	json.NewEncoder(w).Encode(resp)
 }
 
-func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
+func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
