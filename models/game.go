@@ -82,7 +82,7 @@ func (g *Game) PlayTurn(p *Player, fieldId int) error {
 		}
 	}
 
-	if &g.Player == nil {
+	if g.Player == (Player{}) {
 		return gameError{
 			message: "Only one player in game",
 		}
