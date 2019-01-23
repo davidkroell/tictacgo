@@ -154,4 +154,17 @@ func TestGameErrors(t *testing.T) {
 			t.Errorf("Got %s, want %s", err.Error(), want)
 		}
 	})
+
+	t.Run("Only one player", func(t *testing.T) {
+		want := "Only one player in game"
+
+		p1 := NewPlayer("David")
+
+		game := NewGame(&p1)
+
+		err := game.PlayTurn(&game.Owner, 4)
+		if err.Error() != want {
+			t.Errorf("Got %s, want %s", err.Error(), want)
+		}
+	})
 }
