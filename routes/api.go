@@ -24,13 +24,9 @@ func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 	owner := models.NewPlayer(reqBody.Owner)
 	Games[reqBody.Name] = models.NewGame(&owner)
 
-	var resp = NewGameResponse{
-		SuccessResponse: SuccessResponse{
-			Response: Response{
-				Success: true,
-			},
-			Message: fmt.Sprintf("Game %s created", reqBody.Name),
-		},
+	var resp = Response{
+		Success: true,
+		Message: fmt.Sprintf("Game %s created", reqBody.Name),
 	}
 
 	json.NewEncoder(w).Encode(resp)
@@ -53,13 +49,9 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 
 	Games[gameId] = game
 
-	var resp = NewGameResponse{
-		SuccessResponse: SuccessResponse{
-			Response: Response{
-				Success: true,
-			},
-			Message: fmt.Sprintf("Game %s joined", query["gameId"]),
-		},
+	var resp = Response{
+		Success: true,
+		Message: fmt.Sprintf("Game %s joined", query["gameId"]),
 	}
 
 	json.NewEncoder(w).Encode(resp)
@@ -69,7 +61,15 @@ func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 	query := mux.Vars(r)
 	gameId := query["gameId"]
 
-	game := Games[gameId]
+	game, exists := Games[gameId]
+	if !exists {
+		resp := Response{
+			Success: false,
+			Message: fmt.Sprintf("Game %s does not exist", gameId),
+		}
+		json.NewEncoder(w).Encode(resp)
+		return
+	}
 
 	json.NewEncoder(w).Encode(game)
 }
@@ -98,7 +98,12 @@ func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = game.PlayTurn(&player, reqBody.Field)
 	if err != nil {
-
+		resp := Response{
+			Success: false,
+			Message: err.Error(),
+		}
+		json.NewEncoder(w).Encode(resp)
+		return
 	}
 
 	// save game back

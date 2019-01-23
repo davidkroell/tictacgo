@@ -1,17 +1,8 @@
 package routes
 
 type Response struct {
-	Success bool `json:"success"`
-}
-
-type SuccessResponse struct {
-	Response
+	Success bool   `json:"success"`
 	Message string `json:"message"`
-}
-
-type ErrorResponse struct {
-	SuccessResponse
-	Code int `json:"code"`
 }
 
 type NewGameBody struct {
@@ -21,10 +12,6 @@ type NewGameBody struct {
 
 type JoinGameBody struct {
 	Player string `json:"player"`
-}
-
-type NewGameResponse struct {
-	SuccessResponse
 }
 
 type PlayGameBody struct {
