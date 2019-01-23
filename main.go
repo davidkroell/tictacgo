@@ -26,5 +26,11 @@ func main() {
 	gamesRouter.Use(RequestLogger)
 	gamesRouter.Use(HeaderBinding)
 
-	log.Fatal(http.ListenAndServe(os.Getenv("LISTEN_ADDR")+":"+os.Getenv("PORT"), r))
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("Port environment variable not set")
+	}
+
+	log.Printf("Starting server on %s:%s", os.Getenv("LISTEN_ADDR"), port)
+	log.Fatal(http.ListenAndServe(os.Getenv("LISTEN_ADDR")+":"+port, r))
 }
