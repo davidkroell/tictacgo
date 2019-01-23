@@ -133,7 +133,7 @@ func (g *Game) IsGameFinished() bool {
 	for i := 0; i < 3; i++ {
 		// check single vertical column
 		if g.Fields[i].OccupiedBy != nil && g.Fields[i+3].OccupiedBy != nil && g.Fields[i+6].OccupiedBy != nil &&
-			g.Fields[i].OccupiedBy == g.Fields[i+3].OccupiedBy && g.Fields[i].OccupiedBy == g.Fields[i+6].OccupiedBy {
+			*g.Fields[i].OccupiedBy == *g.Fields[i+3].OccupiedBy && *g.Fields[i].OccupiedBy == *g.Fields[i+6].OccupiedBy {
 			g.Winner = g.Fields[i].OccupiedBy
 			g.IsFinished = true
 			return true
@@ -142,13 +142,13 @@ func (g *Game) IsGameFinished() bool {
 
 	// check diagonals
 	if g.Fields[0].OccupiedBy != nil && g.Fields[4].OccupiedBy != nil && g.Fields[8].OccupiedBy != nil &&
-		g.Fields[0].OccupiedBy == g.Fields[4].OccupiedBy && g.Fields[0].OccupiedBy == g.Fields[8].OccupiedBy {
+		*g.Fields[0].OccupiedBy == *g.Fields[4].OccupiedBy && *g.Fields[0].OccupiedBy == *g.Fields[8].OccupiedBy {
 		g.Winner = g.Fields[4].OccupiedBy
 		g.IsFinished = true
 		return true
 	}
 	if g.Fields[2].OccupiedBy != nil && g.Fields[4].OccupiedBy != nil && g.Fields[6].OccupiedBy != nil &&
-		g.Fields[2].OccupiedBy == g.Fields[4].OccupiedBy && g.Fields[2].OccupiedBy == g.Fields[6].OccupiedBy {
+		*g.Fields[2].OccupiedBy == *g.Fields[4].OccupiedBy && *g.Fields[2].OccupiedBy == *g.Fields[6].OccupiedBy {
 		g.Winner = g.Fields[4].OccupiedBy
 		g.IsFinished = true
 		return true

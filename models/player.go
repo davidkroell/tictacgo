@@ -1,7 +1,7 @@
 package models
 
 type Player struct {
-	Name string
+	Name string `json:"name"`
 }
 
 func NewPlayer(name string) Player {
