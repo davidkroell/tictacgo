@@ -7,6 +7,7 @@ import (
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
+// Responsible for logging each request
 func RequestLogger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Do stuff here
@@ -16,6 +17,7 @@ func RequestLogger(next http.Handler) http.Handler {
 	})
 }
 
+// Check if HTTP Headers are set correctly and sets response Headers
 func HeaderBinding(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
