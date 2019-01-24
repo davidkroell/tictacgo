@@ -113,10 +113,9 @@ func (g *Game) PlayTurn(p *Player, fieldId int) error {
 		// check if Game is finished after each turn
 		g.isGameFinished()
 		return nil
-	} else {
-		return gameError{
-			message: "Player not at turn",
-		}
+	}
+	return gameError{
+		message: "Player not at turn",
 	}
 }
 
