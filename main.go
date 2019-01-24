@@ -1,7 +1,7 @@
 package main
 
 import (
-	. "github.com/davidkroell/tictacgo/routes"
+	"github.com/davidkroell/tictacgo/routes"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"log"
@@ -20,14 +20,14 @@ func main() {
 	gamesRouter := r.PathPrefix("/games").Subrouter()
 
 	// bind routes
-	gamesRouter.HandleFunc("/new", NewGameHandler).Methods("POST")
-	gamesRouter.HandleFunc("/{gameId}", StatusGameHandler).Methods("GET")
-	gamesRouter.HandleFunc("/{gameId}/join", JoinGameHandler).Methods("POST")
-	gamesRouter.HandleFunc("/{gameId}/play", PlayGameHandler).Methods("POST")
+	gamesRouter.HandleFunc("/new", routes.NewGameHandler).Methods("POST")
+	gamesRouter.HandleFunc("/{gameId}", routes.StatusGameHandler).Methods("GET")
+	gamesRouter.HandleFunc("/{gameId}/join", routes.JoinGameHandler).Methods("POST")
+	gamesRouter.HandleFunc("/{gameId}/play", routes.PlayGameHandler).Methods("POST")
 
 	// add middleware
-	gamesRouter.Use(RequestLogger)
-	gamesRouter.Use(HeaderBinding)
+	gamesRouter.Use(routes.RequestLogger)
+	gamesRouter.Use(routes.HeaderBinding)
 
 	port := os.Getenv("PORT")
 	if port == "" {

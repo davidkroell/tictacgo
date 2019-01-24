@@ -9,10 +9,10 @@ import (
 	"net/http"
 )
 
-// Holds all games
+// Games stores all current games
 var Games = map[string]models.Game{}
 
-// Create new game and save into Games map
+// NewGameHandler creates new game and save it into Games map
 func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var reqBody NewGameBody
@@ -33,7 +33,7 @@ func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// Player joins game
+// JoinGameHandler handles join of a player
 func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var reqBody JoinGameBody
@@ -59,7 +59,7 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// Returns the status of a game, or an error if no game with this ID available
+// StatusGameHandler returns the status of a game, or an error if no game with this ID available
 func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 	query := mux.Vars(r)
 	gameId := query["gameId"]
@@ -77,7 +77,7 @@ func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(game)
 }
 
-// Play a game with the given Player and field ID
+// PlayGameHandler handles playing a game with the given Player and field ID
 func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 	// retrieve game
 	query := mux.Vars(r)

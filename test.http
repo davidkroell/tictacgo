@@ -29,13 +29,64 @@ Accept: application/json
 
 ###
 
+# play game
 POST http://localhost:9999/games/one-on-one/play
 Content-Type: application/json
 Accept: application/json
 
 {
   "player": "David",
-  "fieldId": 2
+  "fieldId": 0
 }
 
 ###
+
+# play game
+POST http://localhost:9999/games/one-on-one/play
+Content-Type: application/json
+Accept: application/json
+
+{
+  "player": "Christian",
+  "fieldId": 4
+}
+
+###
+
+# play game
+POST http://localhost:9999/games/one-on-one/play
+Content-Type: application/json
+Accept: application/json
+
+{
+  "player": "David",
+  "fieldId": 3
+}
+
+###
+
+# play game
+POST http://localhost:9999/games/one-on-one/play
+Content-Type: application/json
+Accept: application/json
+
+{
+  "player": "Christian",
+  "fieldId": 8
+}
+
+
+###
+
+# play game
+POST http://localhost:9999/games/one-on-one/play
+Content-Type: application/json
+Accept: application/json
+
+{
+  "player": "David",
+  "fieldId": 6
+}
+
+###
+

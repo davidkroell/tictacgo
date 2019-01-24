@@ -1,5 +1,6 @@
 package models
 
+//Game holds data about a game
 type Game struct {
 	Fields     []Field `json:"fields"`
 	Owner      Player  `json:"owner"`
@@ -9,12 +10,14 @@ type Game struct {
 	IsFinished bool    `json:"isFinished"`
 }
 
+//Field holds data about a field
 type Field struct {
 	PositionX  int     `json:"positionX"`
 	PositionY  int     `json:"positionY"`
 	OccupiedBy *Player `json:"occupiedBy"`
 }
 
+//NewGame returns a new instance of a game
 func NewGame(owner *Player) Game {
 
 	var instance = Game{
@@ -63,6 +66,7 @@ func NewGame(owner *Player) Game {
 	return instance
 }
 
+//JoinGame joins a player to a game
 func (g *Game) JoinGame(player *Player) {
 	g.Player = *player
 }
@@ -75,6 +79,7 @@ func (ge gameError) Error() string {
 	return ge.message
 }
 
+//PlayTurn plays a turn
 func (g *Game) PlayTurn(p *Player, fieldId int) error {
 	if g.IsFinished {
 		return gameError{
@@ -106,7 +111,7 @@ func (g *Game) PlayTurn(p *Player, fieldId int) error {
 			f.OccupiedBy = p
 
 			// check if Game is finished after each turn
-			g.IsGameFinished()
+			g.isGameFinished()
 			return nil
 		}
 	} else {
@@ -116,7 +121,8 @@ func (g *Game) PlayTurn(p *Player, fieldId int) error {
 	}
 }
 
-func (g *Game) IsGameFinished() bool {
+//isGameFinished checks if game is finished
+func (g *Game) isGameFinished() bool {
 
 	// check horizontal rows
 	for i := 0; i < 3; i++ {
