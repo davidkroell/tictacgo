@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// MiddlewareFunc is a custom Middleware type
 type MiddlewareFunc func(http.Handler) http.Handler
 
 // RequestLogger logs each request

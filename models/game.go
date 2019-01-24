@@ -107,13 +107,12 @@ func (g *Game) PlayTurn(p *Player, fieldId int) error {
 			return gameError{
 				message: "Field already occupied",
 			}
-		} else {
-			f.OccupiedBy = p
-
-			// check if Game is finished after each turn
-			g.isGameFinished()
-			return nil
 		}
+		f.OccupiedBy = p
+
+		// check if Game is finished after each turn
+		g.isGameFinished()
+		return nil
 	} else {
 		return gameError{
 			message: "Player not at turn",

@@ -1,23 +1,23 @@
 package routes
 
-// Default JSON respsonse body
+// Response is a default JSON respsonse body
 type Response struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 }
 
-// Request Body for a new game
+// NewGameBody is a JSON request body for a new game
 type NewGameBody struct {
 	Name  string `json:"name"`
 	Owner string `json:"owner"`
 }
 
-// Request Body for joining a game
+// JoinGameBody is a JSON request body for joining a game
 type JoinGameBody struct {
 	Player string `json:"player"`
 }
 
-// Request Body for play game handler
+// PlayGameBody is a JSON request body for play game handler
 type PlayGameBody struct {
 	Player string `json:"player"`
 	Field  int    `json:"fieldId"`
