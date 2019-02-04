@@ -43,17 +43,17 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err.Error())
 	}
 	query := mux.Vars(r)
-	gameId := query["gameId"]
+	gameID := query["gameID"]
 
-	game := Games[gameId]
+	game := Games[gameID]
 
 	game.Player = models.NewPlayer(reqBody.Player)
 
-	Games[gameId] = game
+	Games[gameID] = game
 
 	var resp = Response{
 		Success: true,
-		Message: fmt.Sprintf("Game %s joined", query["gameId"]),
+		Message: fmt.Sprintf("Game %s joined", query["gameID"]),
 	}
 
 	json.NewEncoder(w).Encode(resp)
@@ -62,13 +62,13 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 // StatusGameHandler returns the status of a game, or an error if no game with this ID available
 func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 	query := mux.Vars(r)
-	gameId := query["gameId"]
+	gameID := query["gameID"]
 
-	game, exists := Games[gameId]
+	game, exists := Games[gameID]
 	if !exists {
 		resp := Response{
 			Success: false,
-			Message: fmt.Sprintf("Game %s does not exist", gameId),
+			Message: fmt.Sprintf("Game %s does not exist", gameID),
 		}
 		json.NewEncoder(w).Encode(resp)
 		return
@@ -81,8 +81,8 @@ func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 	// retrieve game
 	query := mux.Vars(r)
-	gameId := query["gameId"]
-	game := Games[gameId]
+	gameID := query["gameID"]
+	game := Games[gameID]
 
 	// retrieve json data
 	decoder := json.NewDecoder(r.Body)
@@ -111,7 +111,7 @@ func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// save game back
-	Games[gameId] = game
+	Games[gameID] = game
 
 	// write to response stream
 	json.NewEncoder(w).Encode(game)
