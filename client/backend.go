@@ -9,8 +9,6 @@ import (
 )
 
 const (
-	prefix = "/games"
-
 	healthRoute     = "/games"
 	newGameRoute    = "/games/new"
 	statusGameRoute = "/games/%s"
@@ -67,8 +65,24 @@ func (c *Client) CreateGame(name string, ch chan<- string) {
 
 	if jsonresponse.Success {
 		ch <- fmt.Sprintf("Game %s created", name)
+		c.Game = name
 		return
 	}
 
 	ch <- fmt.Sprint("Error occured")
+}
+
+func (c *Client) JoinGame(name string, ch chan<- string) {
+	// TODO implement
+
+	// set games name
+	c.Game = name
+}
+
+func (c *Client) PlayTurn(field int, ch chan<- string) {
+	// TODO implement
+}
+
+func (c *Client) StatusGame(ch chan<- string) {
+	// TODO implement
 }
