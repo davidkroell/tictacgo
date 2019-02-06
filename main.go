@@ -30,6 +30,7 @@ func serverMode() {
 	gamesRouter := r.PathPrefix("/games").Subrouter()
 
 	// bind routes
+	gamesRouter.HandleFunc("", routes.HealthHandler).Methods("GET")
 	gamesRouter.HandleFunc("/new", routes.NewGameHandler).Methods("POST")
 	gamesRouter.HandleFunc("/{gameID}", routes.StatusGameHandler).Methods("GET")
 	gamesRouter.HandleFunc("/{gameID}/join", routes.JoinGameHandler).Methods("POST")

@@ -12,6 +12,11 @@ import (
 // Games stores all current games
 var Games = map[string]models.Game{}
 
+// HealthHandler returns HTTP 200 if service is available
+func HealthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(`{"status":"healthy"`))
+}
+
 // NewGameHandler creates new game and save it into Games map
 func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
