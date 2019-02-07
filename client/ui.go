@@ -3,7 +3,10 @@ package client
 import (
 	"bufio"
 	"fmt"
+	"github.com/davidkroell/tictacgo/models"
 	"os"
+	"strconv"
+	"time"
 )
 
 // Client is a
@@ -46,13 +49,13 @@ func (c *Client) StartInteractive() {
 		input.Scan()
 		go c.JoinGame(input.Text(), ch)
 
+		fmt.Print(<-ch)
 	} else {
 		fmt.Printf("Name for new game: ")
 		input.Scan()
 		go c.CreateGame(input.Text(), ch)
 
-		a := <-ch
-		fmt.Print(a)
+		fmt.Print(<-ch)
 	}
 	c.GameLoop()
 }
@@ -84,5 +87,42 @@ func isJoinGame(input *bufio.Scanner) bool {
 
 // GameLoop starts the main game loop until the game is finished
 func (c *Client) GameLoop() {
-	// TODO implement
+	// TODO complete
+
+	uich := make(chan models.Game)
+	ms := 1000
+	interval := time.Duration(ms) * time.Millisecond
+	go c.StatusUpdater(interval, uich)
+
+	ch := make(chan string)
+
+	input := bufio.NewScanner(os.Stdin)
+	for {
+		gamestatus := <-uich
+
+		if gamestatus.Player == (models.Player{}) {
+			fmt.Println("Waiting for other player")
+			continue
+		}
+
+		err := c.RenderPlayField(gamestatus, os.Stdout)
+
+		if err != nil {
+			fmt.Print(err)
+		}
+
+		if gamestatus.NextTurn.Name == c.Username {
+			// current players turn
+			fmt.Print("Field number: ")
+
+			input.Scan()
+			num, err := strconv.Atoi(input.Text())
+			if err != nil {
+				fmt.Println("Error occured. Type a number")
+				continue
+			}
+			go c.PlayTurn(num, ch)
+			fmt.Print(<-ch) //TODO implement
+		}
+	}
 }

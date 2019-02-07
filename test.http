@@ -13,7 +13,7 @@ Accept: application/json
 ###
 
 # join an existing game
-POST http://localhost:9999/games/one-on-one/join
+POST http://localhost:9999/games/asdf/join
 Content-Type: application/json
 Accept: application/json
 
@@ -24,13 +24,13 @@ Accept: application/json
 ###
 
 # retrieve status of game
-GET http://localhost:9999/games/one-on-one
+GET http://localhost:9999/games/asdf
 Accept: application/json
 
 ###
 
 # play game
-POST http://localhost:9999/games/one-on-one/play
+POST http://localhost:9999/games/asdf/play
 Content-Type: application/json
 Accept: application/json
 
@@ -42,13 +42,13 @@ Accept: application/json
 ###
 
 # play game
-POST http://localhost:9999/games/one-on-one/play
+POST http://localhost:9999/games/asdf/play
 Content-Type: application/json
 Accept: application/json
 
 {
   "player": "Christian",
-  "fieldId": 4
+  "fieldId": 7
 }
 
 ###

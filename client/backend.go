@@ -3,9 +3,12 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/davidkroell/tictacgo/models"
 	"github.com/davidkroell/tictacgo/routes"
 	"io"
+	"log"
 	"net/http"
+	"time"
 )
 
 const (
@@ -40,6 +43,26 @@ func (c *Client) CreateGame(name string, ch chan<- string) {
 		Owner: c.Username,
 	}
 
+	jsonresponse := jsonAPICall(c.BaseURL+newGameRoute, body, ch)
+
+	if jsonresponse.Success {
+		c.Game = name
+	}
+
+	ch <- jsonresponse.Message
+}
+
+func (c *Client) JoinGame(name string, ch chan<- string) {
+	body := routes.JoinGameBody{
+		Player: c.Username,
+	}
+
+	jsonresponse := jsonAPICall(fmt.Sprintf(c.BaseURL+joinGameRoute, name), body, ch)
+
+	ch <- jsonresponse.Message
+}
+
+func jsonAPICall(endpoint string, body interface{}, ch chan<- string) routes.Response {
 	reader, writer := io.Pipe()
 
 	go func() {
@@ -50,39 +73,64 @@ func (c *Client) CreateGame(name string, ch chan<- string) {
 		}
 	}()
 
-	resp, err := http.Post(c.BaseURL+newGameRoute, "application/json", reader)
+	resp, err := http.Post(endpoint, "application/json", reader)
 	if err != nil {
 		ch <- fmt.Sprintf("An error occured:\n%v", err.Error())
-		return
+		return routes.Response{}
 	}
 	defer resp.Body.Close()
 
 	var jsonresponse routes.Response
 	if err := json.NewDecoder(resp.Body).Decode(&jsonresponse); err != nil {
 		ch <- fmt.Sprintf("An error occured:\n%v", err.Error())
-		return
+		return routes.Response{}
 	}
 
-	if jsonresponse.Success {
-		ch <- fmt.Sprintf("Game %s created", name)
-		c.Game = name
-		return
-	}
-
-	ch <- fmt.Sprint("Error occured")
-}
-
-func (c *Client) JoinGame(name string, ch chan<- string) {
-	// TODO implement
-
-	// set games name
-	c.Game = name
+	return jsonresponse
 }
 
 func (c *Client) PlayTurn(field int, ch chan<- string) {
-	// TODO implement
+	body := routes.PlayGameBody{
+		Player: c.Username,
+		Field:  field,
+	}
+
+	jsonresponse := jsonAPICall(fmt.Sprintf(c.BaseURL+playGameRoute, c.Game), body, ch)
+
+	if jsonresponse.Success {
+		ch <- fmt.Sprintf("Turn %d played\n", field)
+		return
+	}
+
+	ch <- jsonresponse.Message
 }
 
-func (c *Client) StatusGame(ch chan<- string) {
-	// TODO implement
+func (c *Client) StatusGame() (models.Game, error) {
+	resp, err := http.Get(fmt.Sprintf(c.BaseURL+statusGameRoute, c.Game))
+
+	if err != nil {
+		return models.Game{}, err
+	}
+
+	defer resp.Body.Close()
+
+	var jsonresponse models.Game
+	if err := json.NewDecoder(resp.Body).Decode(&jsonresponse); err != nil {
+		return models.Game{}, err
+	}
+
+	return jsonresponse, nil
+}
+
+func (c *Client) StatusUpdater(interval time.Duration, ch chan models.Game) {
+	for {
+		game, err := c.StatusGame()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		ch <- game
+
+		time.Sleep(interval)
+	}
 }
