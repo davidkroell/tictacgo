@@ -48,15 +48,12 @@ func (c *Client) StartInteractive() {
 		fmt.Printf("Game to join: ")
 		input.Scan()
 		go c.JoinGame(input.Text(), ch)
-
-		fmt.Print(<-ch)
 	} else {
 		fmt.Printf("Name for new game: ")
 		input.Scan()
 		go c.CreateGame(input.Text(), ch)
-
-		fmt.Print(<-ch)
 	}
+	fmt.Println(<-ch)
 	c.GameLoop()
 }
 
@@ -87,9 +84,7 @@ func isJoinGame(input *bufio.Scanner) bool {
 
 // GameLoop starts the main game loop until the game is finished
 func (c *Client) GameLoop() {
-	// TODO complete
-
-	uich := make(chan models.Game)
+	uich := make(chan models.Game, 1)
 	ms := 1000
 	interval := time.Duration(ms) * time.Millisecond
 	go c.StatusUpdater(interval, uich)
@@ -106,9 +101,22 @@ func (c *Client) GameLoop() {
 		}
 
 		err := c.RenderPlayField(gamestatus, os.Stdout)
-
 		if err != nil {
 			fmt.Print(err)
+		}
+
+		if gamestatus.IsFinished {
+			var winnerStr string
+			if gamestatus.Winner == nil {
+				winnerStr = "Draw! GG!"
+			} else if gamestatus.Winner.Name == c.Username {
+				winnerStr = "You won the game! GG!"
+			} else {
+				winnerStr = "You won the game! GG!"
+			}
+
+			fmt.Println(winnerStr)
+			break
 		}
 
 		if gamestatus.NextTurn.Name == c.Username {
@@ -122,7 +130,8 @@ func (c *Client) GameLoop() {
 				continue
 			}
 			go c.PlayTurn(num, ch)
-			fmt.Print(<-ch) //TODO implement
+			<-uich // receive the obsolete game object from channel
+			fmt.Print(<-ch)
 		}
 	}
 }

@@ -48,13 +48,13 @@ Accept: application/json
 
 {
   "player": "Christian",
-  "fieldId": 7
+  "fieldId": 8
 }
 
 ###
 
 # play game
-POST http://localhost:9999/games/one-on-one/play
+POST http://localhost:9999/games/asdf/play
 Content-Type: application/json
 Accept: application/json
 
@@ -66,7 +66,7 @@ Accept: application/json
 ###
 
 # play game
-POST http://localhost:9999/games/one-on-one/play
+POST http://localhost:9999/games/asdf/play
 Content-Type: application/json
 Accept: application/json
 
@@ -79,7 +79,7 @@ Accept: application/json
 ###
 
 # play game
-POST http://localhost:9999/games/one-on-one/play
+POST http://localhost:9999/games/asdf/play
 Content-Type: application/json
 Accept: application/json
 

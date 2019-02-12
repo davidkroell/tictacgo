@@ -129,8 +129,11 @@ func (c *Client) StatusUpdater(interval time.Duration, ch chan models.Game) {
 			log.Fatal(err)
 		}
 
-		ch <- game
+		select {
+		case ch <- game:
+		default:
 
+		}
 		time.Sleep(interval)
 	}
 }
