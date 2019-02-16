@@ -59,6 +59,10 @@ func (c *Client) JoinGame(name string, ch chan<- string) {
 
 	jsonresponse := jsonAPICall(fmt.Sprintf(c.BaseURL+joinGameRoute, name), body, ch)
 
+	if jsonresponse.Success {
+		c.Game = name
+	}
+
 	ch <- jsonresponse.Message
 }
 

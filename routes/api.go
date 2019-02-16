@@ -22,9 +22,18 @@ func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var reqBody NewGameBody
 
-	err := decoder.Decode(&reqBody)
-	if err != nil {
+	if err := decoder.Decode(&reqBody); err != nil {
 		log.Fatal(err.Error())
+	}
+
+	if _, exists := Games[reqBody.Name]; exists {
+		var resp = Response{
+			Success: false,
+			Message: fmt.Sprintf("Game named %s already exists", reqBody.Name),
+		}
+
+		json.NewEncoder(w).Encode(resp)
+		return
 	}
 
 	owner := models.NewPlayer(reqBody.Owner)

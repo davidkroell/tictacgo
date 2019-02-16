@@ -8,18 +8,19 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 func main() {
 	if len(os.Args) > 1 {
-		clientMode()
+		ClientMode()
 	} else {
-		serverMode()
+		ServerMode()
 	}
 }
 
-// server starts a tictacgo server instance
-func serverMode() {
+// ServerMode starts a tictacgo server instance
+func ServerMode() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("No .env file present. Environment not loaded from file")
@@ -50,8 +51,20 @@ func serverMode() {
 	log.Fatal(http.ListenAndServe(os.Getenv("LISTEN_ADDR")+":"+port, r))
 }
 
-// client launches the client application
-func clientMode() {
+// ClientMode launches the client application
+func ClientMode() {
+	url := os.Args[1]
+
+	// add https if no protocol is specified
+	if !strings.HasPrefix(url, "https://") {
+		url = "https://" + url
+	}
+
+	// cut trailing comma
+	if url[len(url)-1] == '/' {
+		url = url[:len(url)-1]
+	}
+
 	c := client.NewClient(os.Args[1])
 
 	c.StartInteractive()
