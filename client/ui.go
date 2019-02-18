@@ -75,8 +75,6 @@ func isJoinGame(input *bufio.Scanner) bool {
 
 		return join[0] == 'j'
 	}
-
-	return false
 }
 
 // GameLoop starts the main game loop until the game is finished
