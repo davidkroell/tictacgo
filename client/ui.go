@@ -58,9 +58,7 @@ func (c *Client) StartInteractive() {
 }
 
 func isJoinGame(input *bufio.Scanner) bool {
-	joinUndefined := true
-
-	for joinUndefined {
+	for {
 		fmt.Printf("Join [j] or create [c] game? ")
 		input.Scan()
 		join := input.Text()
@@ -76,7 +74,6 @@ func isJoinGame(input *bufio.Scanner) bool {
 		}
 
 		return join[0] == 'j'
-		joinUndefined = false
 	}
 
 	return false
