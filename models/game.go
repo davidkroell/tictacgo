@@ -166,5 +166,6 @@ func (g *Game) isGameFinished() bool {
 		return false
 	}
 
+	g.IsFinished = true
 	return true
 }

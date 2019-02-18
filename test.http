@@ -6,7 +6,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "one-on-one",
+  "name": "asdf",
   "owner": "David"
 }
 
@@ -36,7 +36,7 @@ Accept: application/json
 
 {
   "player": "David",
-  "fieldId": 0
+  "fieldId": 3
 }
 
 ###

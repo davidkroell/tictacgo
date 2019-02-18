@@ -107,7 +107,7 @@ func (c *Client) GameLoop() {
 			} else if gamestatus.Winner.Name == c.Username {
 				winnerStr = "You won the game! GG!"
 			} else {
-				winnerStr = "You won the game! GG!"
+				winnerStr = "You lost the game! WP!"
 			}
 
 			fmt.Println(winnerStr)
