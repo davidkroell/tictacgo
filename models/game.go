@@ -123,7 +123,7 @@ func (g *Game) PlayTurn(p *Player, fieldId int) error {
 func (g *Game) isGameFinished() bool {
 
 	// check horizontal rows
-	for i := 0; i < 3; i++ {
+	for i := 0; i <= 6; i = i + 3 {
 		// check single vertical row
 		if g.Fields[i].OccupiedBy != nil && g.Fields[i+1].OccupiedBy != nil && g.Fields[i+2].OccupiedBy != nil &&
 			*g.Fields[i].OccupiedBy == *g.Fields[i+1].OccupiedBy && *g.Fields[i].OccupiedBy == *g.Fields[i+2].OccupiedBy {

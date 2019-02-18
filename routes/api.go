@@ -7,10 +7,16 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"sync"
 )
 
 // Games stores all current games
-var Games = map[string]models.Game{}
+var Games = struct {
+	Collection map[string]models.Game
+	sync.Mutex
+}{
+	Collection: map[string]models.Game{},
+}
 
 // HealthHandler returns HTTP 200 if service is available
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +32,10 @@ func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err.Error())
 	}
 
-	if _, exists := Games[reqBody.Name]; exists {
+	Games.Lock()
+	defer Games.Unlock()
+
+	if _, exists := Games.Collection[reqBody.Name]; exists {
 		var resp = Response{
 			Success: false,
 			Message: fmt.Sprintf("Game named %s already exists", reqBody.Name),
@@ -37,7 +46,7 @@ func NewGameHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	owner := models.NewPlayer(reqBody.Owner)
-	Games[reqBody.Name] = models.NewGame(&owner)
+	Games.Collection[reqBody.Name] = models.NewGame(&owner)
 
 	var resp = Response{
 		Success: true,
@@ -59,11 +68,13 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 	query := mux.Vars(r)
 	gameID := query["gameID"]
 
-	game := Games[gameID]
+	Games.Lock()
+	game := Games.Collection[gameID]
 
 	game.Player = models.NewPlayer(reqBody.Player)
 
-	Games[gameID] = game
+	Games.Collection[gameID] = game
+	Games.Unlock()
 
 	var resp = Response{
 		Success: true,
@@ -78,7 +89,7 @@ func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 	query := mux.Vars(r)
 	gameID := query["gameID"]
 
-	game, exists := Games[gameID]
+	game, exists := Games.Collection[gameID]
 	if !exists {
 		resp := Response{
 			Success: false,
@@ -96,7 +107,10 @@ func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 	// retrieve game
 	query := mux.Vars(r)
 	gameID := query["gameID"]
-	game := Games[gameID]
+
+	Games.Lock()
+	defer Games.Unlock()
+	game := Games.Collection[gameID]
 
 	// retrieve json data
 	decoder := json.NewDecoder(r.Body)
@@ -125,7 +139,7 @@ func PlayGameHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// save game back
-	Games[gameID] = game
+	Games.Collection[gameID] = game
 
 	// write to response stream
 	json.NewEncoder(w).Encode(game)
