@@ -126,7 +126,7 @@ func (c *Client) StatusGame() (models.Game, error) {
 	return jsonresponse, nil
 }
 
-func (c *Client) StatusUpdater(interval time.Duration, ch chan models.Game) {
+func (c *Client) statusUpdater(interval time.Duration, ch chan models.Game) {
 	for {
 		game, err := c.StatusGame()
 		if err != nil {

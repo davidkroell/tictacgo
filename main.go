@@ -1,4 +1,4 @@
-package main
+package tictacgo
 
 import (
 	"github.com/davidkroell/tictacgo/client"
@@ -10,14 +10,6 @@ import (
 	"os"
 	"strings"
 )
-
-func main() {
-	if len(os.Args) > 1 {
-		ClientMode()
-	} else {
-		ServerMode()
-	}
-}
 
 // ServerMode starts a tictacgo server instance
 func ServerMode() {

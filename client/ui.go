@@ -82,7 +82,7 @@ func (c *Client) GameLoop() {
 	uich := make(chan models.Game, 1)
 	ms := 1000
 	interval := time.Duration(ms) * time.Millisecond
-	go c.StatusUpdater(interval, uich)
+	go c.statusUpdater(interval, uich)
 
 	ch := make(chan string)
 
