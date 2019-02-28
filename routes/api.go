@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"sync"
+	"time"
 )
 
 // Games stores all current games
@@ -97,6 +98,16 @@ func StatusGameHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		json.NewEncoder(w).Encode(resp)
 		return
+	}
+
+	if game.IsFinished {
+		// if finished, delete game 10 seconds after last access
+		go func() {
+			<-time.After(time.Second * 10)
+			Games.Lock()
+			delete(Games.Collection, gameID)
+			Games.Unlock()
+		}()
 	}
 
 	json.NewEncoder(w).Encode(game)
