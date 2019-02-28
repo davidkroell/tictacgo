@@ -12,6 +12,7 @@
 
 # Output Directory
 build
+dist
 
 .idea
 
